@@ -12,13 +12,19 @@ window.TestChamber = class TestChamber
   prepareData: (rawData) ->
     $collection = $(".series-box:checked")
     _.map $collection, (checkbox) ->
+      jBox = $(checkbox);
       _.map rawData, (data) ->
-        [data[0] * 24 * 3600, data[checkbox.value]]
+        [Date.parse(data[0]), data[jBox.data('series-index')]]
 
   chart: -> @chart
 
+  getSeries: ->
+    $collection = $(".series-box:checked")
+    _.pluck $collection, 'name'
+
   initializeChart: (chartData, startDate) =>
     preparedData = @prepareData(chartData)
+    seriesNames = @getSeries()
     @chart = new Highcharts.StockChart
       chart:
         renderTo: 'container'
@@ -50,16 +56,7 @@ window.TestChamber = class TestChamber
         title:
           text: "Temperature (C)"
 
-      series: [
-        {
-          name: 'Test Chamber Avg Temp',
-          data: preparedData[0]
-        },
-        {
-          name: "External Air Temp",
-          data: preparedData[1]
-        }
-      ]
+      series: _.map( seriesNames, (name, index) -> { name: name, data: preparedData[index] } )
 
 jQuery ($) ->
   application = new Application

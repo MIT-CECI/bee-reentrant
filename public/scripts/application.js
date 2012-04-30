@@ -4,6 +4,8 @@
 
   Application = (function() {
 
+    Application.name = 'Application';
+
     function Application() {
       this.chamber = new TestChamber;
     }
@@ -18,9 +20,14 @@
 
   window.TestChamber = TestChamber = (function() {
 
+    TestChamber.name = 'TestChamber';
+
     function TestChamber(channel) {
-      if (channel == null) channel = 'test_chamber';
+      if (channel == null) {
+        channel = 'test_chamber';
+      }
       this.initializeChart = __bind(this.initializeChart, this);
+
       this.chart = 0;
       this.maxPoints = 60;
       this.initializeChart(window.sampleData, new Date());
@@ -30,8 +37,10 @@
       var $collection;
       $collection = $(".series-box:checked");
       return _.map($collection, function(checkbox) {
+        var jBox;
+        jBox = $(checkbox);
         return _.map(rawData, function(data) {
-          return [data[0] * 24 * 3600, data[checkbox.value]];
+          return [Date.parse(data[0]), data[jBox.data('series-index')]];
         });
       });
     };
@@ -40,9 +49,16 @@
       return this.chart;
     };
 
+    TestChamber.prototype.getSeries = function() {
+      var $collection;
+      $collection = $(".series-box:checked");
+      return _.pluck($collection, 'name');
+    };
+
     TestChamber.prototype.initializeChart = function(chartData, startDate) {
-      var preparedData;
+      var preparedData, seriesNames;
       preparedData = this.prepareData(chartData);
+      seriesNames = this.getSeries();
       return this.chart = new Highcharts.StockChart({
         chart: {
           renderTo: 'container',
@@ -83,15 +99,12 @@
             text: "Temperature (C)"
           }
         },
-        series: [
-          {
-            name: 'Test Chamber Avg Temp',
-            data: preparedData[0]
-          }, {
-            name: "External Air Temp",
-            data: preparedData[1]
-          }
-        ]
+        series: _.map(seriesNames, function(name, index) {
+          return {
+            name: name,
+            data: preparedData[index]
+          };
+        })
       });
     };
 
