@@ -46,7 +46,7 @@ Checkboxes
 
 The HTML checkboxes that we're going to use need the following attributes:
 
-  `value` is the **index of the sampleData array** for that series
+  `data-series-index` is the **index of the sampleData array** for that series
 
   `name` is the name of the series
 
@@ -54,10 +54,10 @@ A possible markup is shown below:
 
 ```html
 <form action="">
-  <input type="checkbox" class="series-box" id="avg-temp" checked="checked" value="1" name="Test Chamber Avg Temp"/>
+  <input type="checkbox" class="series-box" id="avg-temp" data-series-index="1" checked="checked" value="1" name="Test Chamber Avg Temp"/>
   <label for="avg-temp">Test Chamber Avg Temp</label>
 
-  <input type="checkbox" class="series-box" id="air-temp" checked="checked" value="2" name="External Air Temp" />
+  <input type="checkbox" class="series-box" id="air-temp" data-series-index="2" checked="checked" value="2" name="External Air Temp" />
   <label for="air-temp">External Air Temp</label>
 </form>
 ```
