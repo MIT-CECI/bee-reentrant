@@ -30,19 +30,34 @@
 
       this.chart = 0;
       this.maxPoints = 60;
+      this.series = 0;
       this.initializeChart(window.sampleData, new Date());
+      this.memoSeries();
     }
 
     TestChamber.prototype.prepareData = function(rawData) {
       var $collection;
-      $collection = $(".series-box:checked");
+      $collection = $(".series-box");
       return _.map($collection, function(checkbox) {
         var jBox;
         jBox = $(checkbox);
         return _.map(rawData, function(data) {
-          return [Date.parse(data[0]), data[jBox.data('series-index')]];
+          return [Date.parse(data[0]), data[jBox.data('array-index')]];
         });
       });
+    };
+
+    TestChamber.prototype.series = function() {
+      return this.series;
+    };
+
+    TestChamber.prototype.memoSeries = function() {
+      var _this = this;
+      this.series = {};
+      _.each(this.chart.series, function(serie, index) {
+        return _this.series[serie.name] = index;
+      });
+      return this.series;
     };
 
     TestChamber.prototype.chart = function() {
@@ -51,7 +66,7 @@
 
     TestChamber.prototype.getSeries = function() {
       var $collection;
-      $collection = $(".series-box:checked");
+      $collection = $(".series-box");
       return _.pluck($collection, 'name');
     };
 
@@ -117,7 +132,7 @@
     application = new Application;
     return ($('.series-box')).change(function(event) {
       var index, serie;
-      index = +($(this)).val() - 1;
+      index = application.chamber.series[this.name];
       serie = application.chamber.chart.series[index];
       if (serie.visible) {
         return serie.hide();

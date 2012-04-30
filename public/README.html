@@ -43,7 +43,7 @@
 
 <p>The HTML checkboxes that we&#39;re going to use need the following attributes:</p>
 
-<p><code>value</code> is the <strong>index of the sampleData array</strong> for that series</p>
+<p><code>data-array-index</code> is the <strong>index of the sampleData array</strong> for that series</p>
 
 <p><code>name</code> is the name of the series</p>
 
@@ -51,10 +51,10 @@
 
 <p>```html
 <form action="">
-  <input type="checkbox" class="series-box" id="avg-temp" checked="checked" value="1" name="Test Chamber Avg Temp"/>
+  <input type="checkbox" class="series-box" id="avg-temp" data-array-index="1" checked="checked" value="1" name="Test Chamber Avg Temp"/>
   <label for="avg-temp">Test Chamber Avg Temp</label></p>
 
-<p><input type="checkbox" class="series-box" id="air-temp" checked="checked" value="2" name="External Air Temp" />
+<p><input type="checkbox" class="series-box" id="air-temp" data-array-index="2" checked="checked" value="2" name="External Air Temp" />
   <label for="air-temp">External Air Temp</label>
 </form>
 ```</p>

@@ -7,19 +7,29 @@ window.TestChamber = class TestChamber
   constructor: (channel = 'test_chamber') ->
     @chart = 0
     @maxPoints = 60
+    @series = 0
     @initializeChart(window.sampleData, new Date())
+    @memoSeries()
 
   prepareData: (rawData) ->
-    $collection = $(".series-box:checked")
+    $collection = $(".series-box")
     _.map $collection, (checkbox) ->
       jBox = $(checkbox);
       _.map rawData, (data) ->
-        [Date.parse(data[0]), data[jBox.data('series-index')]]
+        [Date.parse(data[0]), data[jBox.data('array-index')]]
+
+  series: -> @series
+
+  memoSeries: ->
+    @series = { }
+    _.each @chart.series, (serie, index) =>
+      @series[serie.name] = index
+    @series
 
   chart: -> @chart
 
   getSeries: ->
-    $collection = $(".series-box:checked")
+    $collection = $(".series-box")
     _.pluck $collection, 'name'
 
   initializeChart: (chartData, startDate) =>
@@ -61,7 +71,7 @@ window.TestChamber = class TestChamber
 jQuery ($) ->
   application = new Application
   ($ '.series-box').change (event) ->
-    index = +($ this).val() - 1
+    index = application.chamber.series[this.name]
     serie = application.chamber.chart.series[index]
     if serie.visible
       serie.hide()
