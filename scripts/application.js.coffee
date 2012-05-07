@@ -41,6 +41,10 @@ window.TestChamber = class TestChamber
         defaultSeriesType: 'line'
         zoomType: 'x'
 
+      exporting:
+        filename: "BEE Chart"
+        width: 1300
+
       rangeSelector:
         buttons: [
             type: 'all'

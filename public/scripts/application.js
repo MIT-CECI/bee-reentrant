@@ -80,6 +80,10 @@
           defaultSeriesType: 'line',
           zoomType: 'x'
         },
+        exporting: {
+          filename: "BEE Chart",
+          width: 1300
+        },
         rangeSelector: {
           buttons: [
             {
