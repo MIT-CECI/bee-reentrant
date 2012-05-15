@@ -14,6 +14,69 @@
       return this.chamber;
     };
 
+    Application.prototype.selectDiv = function(holder) {
+      var range;
+      this.clearSelection();
+      if (document.selection) {
+        range = document.body.createTextRange();
+        range.moveToElementText(document.getElementById(holder));
+        return range.select();
+      } else if (window.getSelection) {
+        range = document.createRange();
+        range.selectNode(document.getElementById(holder));
+        return window.getSelection().addRange(range);
+      }
+    };
+
+    Application.prototype.clearSelection = function() {
+      if (document.selection) {
+        return document.selection.empty();
+      } else if (window.getSelection) {
+        return window.getSelection().removeAllRanges();
+      }
+    };
+
+    Application.prototype.exportData = function() {
+      var baseSerie, chart, extremes, indexes;
+      chart = this.chamber.chart;
+      baseSerie = chart.xAxis[0];
+      extremes = baseSerie.getExtremes();
+      indexes = this.getIndexes(extremes);
+      ($('#data-holder')).text(this.extractData(indexes[0], indexes[1]).toString());
+      return ($('.hidden')).show();
+    };
+
+    Application.prototype.extractData = function(from, to) {
+      var i, _i, _results;
+      _results = [];
+      for (i = _i = from; from <= to ? _i <= to : _i >= to; i = from <= to ? ++_i : --_i) {
+        _results.push(window.sampleData[i]);
+      }
+      return _results;
+    };
+
+    Application.prototype.getIndexes = function(extremes) {
+      return [this.binarySearch(extremes.min), this.binarySearch(extremes.max)];
+    };
+
+    Application.prototype.binarySearch = function(timestamp) {
+      var high, low, mid, time;
+      low = 0;
+      high = window.sampleData.length - 1;
+      while (high >= low) {
+        mid = Math.floor((low + high) / 2);
+        time = Date.parse(window.sampleData[mid][0]);
+        if (time > timestamp) {
+          high = mid - 1;
+        } else if (time < timestamp) {
+          low = mid + 1;
+        } else {
+          return mid;
+        }
+      }
+      return low - 1;
+    };
+
     return Application;
 
   })();
@@ -82,16 +145,33 @@
         },
         exporting: {
           filename: "BEE Chart",
-          width: 1300
+          width: 1300,
+          buttons: {
+            dataExportButton: {
+              hoverSymbolFill: '#768F3E',
+              onclick: function() {
+                return window.app.exportData();
+              },
+              symbol: 'exportIcon',
+              align: 'right',
+              x: -62
+            }
+          }
         },
         rangeSelector: {
           buttons: [
             {
               type: 'all',
               text: 'All'
+            }, {
+              type: 'day',
+              count: 1,
+              text: '1d'
             }
-          ]
+          ],
+          selected: 1
         },
+        navigator: {},
         title: {
           text: 'Test Chamber Temperature',
           x: -20
@@ -133,7 +213,10 @@
 
   jQuery(function($) {
     var application;
-    application = new Application;
+    window.app = application = new Application;
+    ($('#copy-text')).click(function() {
+      return application.selectDiv('data-holder');
+    });
     return ($('.series-box')).change(function(event) {
       var index, serie;
       index = application.chamber.series[this.name];

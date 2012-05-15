@@ -46,7 +46,8 @@ var HC = Highcharts,
 		downloadPDF: 'Download PDF document',
 		downloadSVG: 'Download SVG vector image',
 		exportButtonTitle: 'Export to raster or vector image',
-		printButtonTitle: 'Print the chart'
+		printButtonTitle: 'Print the chart',
+		dataExportButton: 'Download CSV data'
 	});
 
 // Buttons and menus are collected in a separate config option set called 'navigation'.
