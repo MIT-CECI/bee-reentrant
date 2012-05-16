@@ -217,16 +217,17 @@
     ($('#copy-text')).click(function() {
       return application.selectDiv('data-holder');
     });
-    return ($('.series-box')).change(function(event) {
+    ($('.series-box')).live('change', function(event) {
       var index, serie;
       index = application.chamber.series[this.name];
       serie = application.chamber.chart.series[index];
-      if (serie.visible) {
-        return serie.hide();
-      } else {
+      if ($(this).attr("checked") === "checked") {
         return serie.show();
+      } else {
+        return serie.hide();
       }
     });
+    return ($('.series-box')).trigger('change');
   });
 
 }).call(this);

@@ -148,10 +148,13 @@ jQuery ($) ->
   window.app = application = new Application
   ($ '#copy-text').click ->
     application.selectDiv('data-holder')
-  ($ '.series-box').change (event) ->
+
+  ($ '.series-box').live 'change', (event) ->
     index = application.chamber.series[this.name]
     serie = application.chamber.chart.series[index]
-    if serie.visible
-      serie.hide()
-    else
+    if $(this).attr("checked") == "checked"
       serie.show()
+    else
+      serie.hide()
+
+  ($ '.series-box').trigger('change')
