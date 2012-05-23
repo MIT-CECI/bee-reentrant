@@ -62,16 +62,15 @@ window.TestChamber = class TestChamber
   constructor: (channel = 'test_chamber') ->
     @chart = 0
     @maxPoints = 60
-    @series = 0
+    @series = []
     @initializeChart(window.sampleData, new Date())
     @memoSeries()
 
   prepareData: (rawData) ->
     $collection = $(".series-box")
     _.map $collection, (checkbox) ->
-      jBox = ($ checkbox)
       _.map rawData, (data) ->
-        [Date.parse(data[1]), data[jBox.data('array-index')]]
+        [Date.parse(data[1]), data[checkbox.value]]
 
   series: -> @series
 

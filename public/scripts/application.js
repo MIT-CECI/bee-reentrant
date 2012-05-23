@@ -93,7 +93,7 @@
 
       this.chart = 0;
       this.maxPoints = 60;
-      this.series = 0;
+      this.series = [];
       this.initializeChart(window.sampleData, new Date());
       this.memoSeries();
     }
@@ -102,10 +102,8 @@
       var $collection;
       $collection = $(".series-box");
       return _.map($collection, function(checkbox) {
-        var jBox;
-        jBox = $(checkbox);
         return _.map(rawData, function(data) {
-          return [Date.parse(data[1]), data[jBox.data('array-index')]];
+          return [Date.parse(data[1]), data[checkbox.value]];
         });
       });
     };
