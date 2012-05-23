@@ -30,8 +30,7 @@ class Application
     ($ '#data-holder').text @extractData(indexes[0], indexes[1]).toString()
     ($ '.hidden').show()
 
-  extractData: (from, to) ->
-    window.sampleData[i] for i in [from..to]
+  extractData: (from, to) -> window.sampleData[i] for i in [from..to]
 
   # Returns the indexes for the `extremes.max` and `extremes.min`
   # in the `window.sampleData` array (original array).
@@ -49,7 +48,7 @@ class Application
     high = window.sampleData.length - 1
     while( high >= low )
       mid = Math.floor((low + high) / 2)
-      time = Date.parse(window.sampleData[mid][0])
+      time = Date.parse(window.sampleData[mid][1])
       if time > timestamp
         high = mid - 1
       else if time < timestamp
@@ -72,7 +71,7 @@ window.TestChamber = class TestChamber
     _.map $collection, (checkbox) ->
       jBox = ($ checkbox)
       _.map rawData, (data) ->
-        [Date.parse(data[0]), data[jBox.data('array-index')]]
+        [Date.parse(data[1]), data[jBox.data('array-index')]]
 
   series: -> @series
 
@@ -142,12 +141,11 @@ window.TestChamber = class TestChamber
         title:
           text: "Temperature (C)"
 
-      series: _.map( seriesNames, (name, index) -> { name: name, data: preparedData[index] } )
+      series: _.map( seriesNames, (name, index) ->
+        { name: name, data: preparedData[index] } )
 
 jQuery ($) ->
   window.app = application = new Application
-  ($ '#copy-text').click ->
-    application.selectDiv('data-holder')
 
   ($ '.series-box').live 'change', (event) ->
     index = application.chamber.series[this.name]
