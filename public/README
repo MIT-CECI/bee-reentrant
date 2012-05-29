@@ -19,31 +19,31 @@
 <p>```javascript</p>
 
 <p>window.sampleData = [
-          [1, 21.618, 24.818],
-          [2, 21.619, 24.818],
-          [3, 21.623, 24.816],
-          [4, 21.625, 24.811],
-          [5, 21.631, 24.8],
-          [6, 21.633, 24.792],
-          [7, 21.637, 24.784],
-          [8, 21.642, 24.771],
-          [9, 21.646, 24.762],
-          [10, 21.655, 24.737],
-          [11, 21.662, 24.723],
-          [12, 21.664, 24.711],
-          [13, 21.67, 24.697],
-          [14, 21.676, 24.683],
-          [15, 21.677, 24.665]
+          [1,  &#39;time-stamp&#39;, 21.618, 24.818],
+          [2,  &#39;time-stamp&#39;, 21.619, 24.818],
+          [3,  &#39;time-stamp&#39;, 21.623, 24.816],
+          [4,  &#39;time-stamp&#39;, 21.625, 24.811],
+          [5,  &#39;time-stamp&#39;, 21.631, 24.8],
+          [6,  &#39;time-stamp&#39;, 21.633, 24.792],
+          [7,  &#39;time-stamp&#39;, 21.637, 24.784],
+          [8,  &#39;time-stamp&#39;, 21.642, 24.771],
+          [9,  &#39;time-stamp&#39;, 21.646, 24.762],
+          [10, &#39;time-stamp&#39;, 21.655, 24.737],
+          [11, &#39;time-stamp&#39;, 21.662, 24.723],
+          [12, &#39;time-stamp&#39;, 21.664, 24.711],
+          [13, &#39;time-stamp&#39;, 21.67, 24.697],
+          [14, &#39;time-stamp&#39;, 21.676, 24.683],
+          [15, &#39;time-stamp&#39;, 21.677, 24.665]
   ];
 ```</p>
 
-<p>The first position of the array is the timestamp. This could be any format that&#39;s easy enough to process. We can always change the Javascript library easier to get that format.</p>
+<p>The first position of the array is the record number. The second one the timestamp on UTC time.</p>
 
-<h2>Checkboxes</h2>
+<hr>
 
 <p>The HTML checkboxes that we&#39;re going to use need the following attributes:</p>
 
-<p><code>data-array-index</code> is the <strong>index of the sampleData array</strong> for that series</p>
+<p><code>value</code> is the <strong>index of the sampleData array</strong> for that series</p>
 
 <p><code>name</code> is the name of the series</p>
 
@@ -51,13 +51,17 @@
 
 <p>```html
 <form action="">
-  <input type="checkbox" class="series-box" id="avg-temp" data-array-index="1" checked="checked" value="1" name="Test Chamber Avg Temp"/>
+  <input type="checkbox" class="series-box" id="avg-temp" checked="checked" value="1" name="Test Chamber Avg Temp"/>
   <label for="avg-temp">Test Chamber Avg Temp</label></p>
 
-<p><input type="checkbox" class="series-box" id="air-temp" data-array-index="2" checked="checked" value="2" name="External Air Temp" />
+<p><input type="checkbox" class="series-box" id="air-temp" checked="checked" value="2" name="External Air Temp" />
   <label for="air-temp">External Air Temp</label>
 </form>
 ```</p>
+
+<h2>Eager Loading</h2>
+
+<p>The graph will only load the <strong>checked checkboxes</strong> at first. Then, it will draw the needed ones when the user requests them. This way, we can have more data but still have an initial loadtime that makes sense.</p>
 
 <h2>Graph Container</h2>
 
