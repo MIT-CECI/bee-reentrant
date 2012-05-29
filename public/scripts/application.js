@@ -1,6 +1,5 @@
 (function() {
-  var Application, TestChamber,
-    __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+  var Application, TestChamber;
 
   Application = (function() {
 
@@ -14,26 +13,8 @@
       return this.chamber;
     };
 
-    Application.prototype.selectDiv = function(holder) {
-      var range;
-      this.clearSelection();
-      if (document.selection) {
-        range = document.body.createTextRange();
-        range.moveToElementText(document.getElementById(holder));
-        return range.select();
-      } else if (window.getSelection) {
-        range = document.createRange();
-        range.selectNode(document.getElementById(holder));
-        return window.getSelection().addRange(range);
-      }
-    };
-
-    Application.prototype.clearSelection = function() {
-      if (document.selection) {
-        return document.selection.empty();
-      } else if (window.getSelection) {
-        return window.getSelection().removeAllRanges();
-      }
+    Application.prototype.addSerie = function(name, index) {
+      return this.chamber.addSerie(name, index);
     };
 
     Application.prototype.exportData = function() {
@@ -85,27 +66,31 @@
 
     TestChamber.name = 'TestChamber';
 
-    function TestChamber(channel) {
-      if (channel == null) {
-        channel = 'test_chamber';
-      }
-      this.initializeChart = __bind(this.initializeChart, this);
+    TestChamber.prototype.seriesSelector = '.series-box:checked';
 
+    function TestChamber() {
       this.chart = 0;
       this.maxPoints = 60;
       this.series = [];
-      this.initializeChart(window.sampleData, new Date());
+      this.initializeChart();
       this.memoSeries();
     }
 
-    TestChamber.prototype.prepareData = function(rawData) {
-      var $collection;
-      $collection = $(".series-box");
-      return _.map($collection, function(checkbox) {
-        return _.map(rawData, function(data) {
-          return [Date.parse(data[1]), data[checkbox.value]];
-        });
+    TestChamber.prototype.prepareOneSerie = function(index) {
+      return _.map(window.sampleData, function(data) {
+        return [Date.parse(data[1]), data[index]];
       });
+    };
+
+    TestChamber.prototype.prepareData = function() {
+      var _this = this;
+      return _.map($(this.seriesSelector), function(checkbox) {
+        return _this.prepareOneSerie(checkbox.value);
+      });
+    };
+
+    TestChamber.prototype.chart = function() {
+      return this.chart;
     };
 
     TestChamber.prototype.series = function() {
@@ -121,20 +106,44 @@
       return this.series;
     };
 
-    TestChamber.prototype.chart = function() {
-      return this.chart;
+    TestChamber.prototype.toggleSerie = function(name) {
+      var index, serie;
+      index = this.series[name];
+      serie = this.chart.series[index];
+      if (serie.visible) {
+        return serie.hide();
+      } else {
+        return serie.show();
+      }
     };
 
-    TestChamber.prototype.getSeries = function() {
-      var $collection;
-      $collection = $(".series-box");
-      return _.pluck($collection, 'name');
+    TestChamber.prototype.memoSerie = function(name) {
+      return this.series[name] = this.chart.series.length;
     };
 
-    TestChamber.prototype.initializeChart = function(chartData, startDate) {
+    TestChamber.prototype.addSerie = function(checkbox) {
+      var index, name;
+      name = checkbox.name;
+      index = checkbox.value;
+      if (this.series[name] != null) {
+        return this.toggleSerie(name);
+      } else {
+        this.memoSerie(name);
+        return this.chart.addSeries({
+          name: name,
+          data: this.prepareOneSerie(index)
+        });
+      }
+    };
+
+    TestChamber.prototype.getSeriesNames = function() {
+      return _.pluck($(this.seriesSelector), 'name');
+    };
+
+    TestChamber.prototype.initializeChart = function() {
       var preparedData, seriesNames;
-      preparedData = this.prepareData(chartData);
-      seriesNames = this.getSeries();
+      preparedData = this.prepareData();
+      seriesNames = this.getSeriesNames();
       return this.chart = new Highcharts.StockChart({
         chart: {
           renderTo: 'container',
@@ -210,19 +219,11 @@
   })();
 
   jQuery(function($) {
-    var application;
-    window.app = application = new Application;
-    ($('.series-box')).live('change', function(event) {
-      var index, serie;
-      index = application.chamber.series[this.name];
-      serie = application.chamber.chart.series[index];
-      if ($(this).attr("checked") === "checked") {
-        return serie.show();
-      } else {
-        return serie.hide();
-      }
+    var app;
+    window.app = app = new Application;
+    return ($('.series-box')).live('change', function(event) {
+      return app.addSerie(this);
     });
-    return ($('.series-box')).trigger('change');
   });
 
 }).call(this);
