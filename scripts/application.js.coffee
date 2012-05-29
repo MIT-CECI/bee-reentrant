@@ -3,24 +3,9 @@ class Application
   constructor: -> @chamber = new TestChamber
   chamber: -> @chamber
 
-  selectDiv: (holder) ->
-    @clearSelection()
-
-    if document.selection
-      range = document.body.createTextRange()
-      range.moveToElementText(document.getElementById(holder))
-      range.select()
-
-    else if window.getSelection
-      range = document.createRange()
-      range.selectNode(document.getElementById(holder))
-      window.getSelection().addRange(range)
-
-  clearSelection: ->
-    if document.selection
-      document.selection.empty()
-    else if window.getSelection
-      window.getSelection().removeAllRanges()
+  # Public API for adding a serie. Receives the name of the serie and the
+  # index of the array it points to.
+  addSerie: (name, index) -> @chamber.addSerie(name, index)
 
   exportData: ->
     chart = @chamber.chart
@@ -30,6 +15,7 @@ class Application
     ($ '#data-holder').text @extractData(indexes[0], indexes[1]).toString()
     ($ '.hidden').show()
 
+  # Returns an array with the data [`from`, `to`] in the original array
   extractData: (from, to) -> window.sampleData[i] for i in [from..to]
 
   # Returns the indexes for the `extremes.max` and `extremes.min`
@@ -59,36 +45,65 @@ class Application
     low - 1
 
 window.TestChamber = class TestChamber
-  constructor: (channel = 'test_chamber') ->
+  seriesSelector: '.series-box:checked'
+
+  constructor: ->
     @chart = 0
     @maxPoints = 60
     @series = []
-    @initializeChart(window.sampleData, new Date())
+    @initializeChart()
     @memoSeries()
 
-  prepareData: (rawData) ->
-    $collection = $(".series-box")
-    _.map $collection, (checkbox) ->
-      _.map rawData, (data) ->
-        [Date.parse(data[1]), data[checkbox.value]]
+  # Takes one sensor index and prepares the series data to graph it.
+  # The index is the sensor's index on the raw data array.
+  prepareOneSerie: (index) ->
+    _.map window.sampleData, (data) -> [Date.parse(data[1]), data[index]]
 
+  # For each checked checkbox, prepare that one serie and add it to an array
+  # This will be used to create the chart the first time.
+  prepareData: ->
+    _.map $(@seriesSelector), (checkbox) => @prepareOneSerie(checkbox.value)
+
+  chart:  -> @chart
   series: -> @series
 
+  # For each graphed series, memo their index.
   memoSeries: ->
     @series = { }
     _.each @chart.series, (serie, index) =>
       @series[serie.name] = index
     @series
 
-  chart: -> @chart
+  # Toggle the serie `name`. This requires the serie to be initialized before
+  # and cached in the `@series` array.
+  toggleSerie: (name) ->
+    index = @series[name]
+    serie = @chart.series[index]
+    if serie.visible
+      serie.hide()
+    else
+      serie.show()
 
-  getSeries: ->
-    $collection = $(".series-box")
-    _.pluck $collection, 'name'
+  # Adds one serie to the memo array. Call this BEFORE adding the serie to the graph.
+  memoSerie: (name)->
+    @series[name] = @chart.series.length
 
-  initializeChart: (chartData, startDate) =>
-    preparedData = @prepareData(chartData)
-    seriesNames = @getSeries()
+  addSerie: (checkbox) ->
+    name  = checkbox.name
+    index = checkbox.value
+    if @series[name]?
+      @toggleSerie(name)
+    else
+      @memoSerie(name)
+      @chart.addSeries({name: name, data: @prepareOneSerie(index)})
+
+  # Returns an array with the names of all the series.
+  getSeriesNames: ->
+    _.pluck $(@seriesSelector), 'name'
+
+  initializeChart: ->
+    preparedData = @prepareData()
+    seriesNames  = @getSeriesNames()
     @chart = new Highcharts.StockChart
       chart:
         renderTo: 'container'
@@ -144,14 +159,5 @@ window.TestChamber = class TestChamber
         { name: name, data: preparedData[index] } )
 
 jQuery ($) ->
-  window.app = application = new Application
-
-  ($ '.series-box').live 'change', (event) ->
-    index = application.chamber.series[this.name]
-    serie = application.chamber.chart.series[index]
-    if $(this).attr("checked") == "checked"
-      serie.show()
-    else
-      serie.hide()
-
-  ($ '.series-box').trigger('change')
+  window.app = app = new Application
+  ($ '.series-box').live 'change', (event) -> app.addSerie(this)
