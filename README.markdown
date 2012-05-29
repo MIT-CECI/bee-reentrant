@@ -1,7 +1,7 @@
 BEE Lab Experiment Review
 ===
 
-Simple graph from a the given data.
+Simple graph from a the given data. A copy of this README can be found at: https://gist.github.com/a98aec327e307ad6f79f
 
 Development
 ===
