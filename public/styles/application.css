@@ -64,6 +64,13 @@ label,
       left: 25%; }
     #bee-room-modal .sensor.west.exterior {
       left: 35%; }
+  #bee-room-modal .sensor.air {
+    top: 250px; }
+    #bee-room-modal .sensor.air.north {
+      right: 25%;
+      top: 350px; }
+    #bee-room-modal .sensor.air.south {
+      left: 25%; }
 
 .modal {
   display: none;

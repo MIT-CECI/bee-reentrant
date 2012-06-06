@@ -167,6 +167,9 @@ sensor =
     $checkbox.trigger('change').prop('checked', !$checkbox.prop('checked'))
 
 jQuery ($) ->
+  ($ '.air-north, .air-south').prop('checked', true)
+  ($ '.sensor.air').addClass('on')
+
   window.app = app = new Application
   ($ 'a[rel]').overlay
     top: 5

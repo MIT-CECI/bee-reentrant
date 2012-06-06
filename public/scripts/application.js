@@ -230,6 +230,8 @@
 
   jQuery(function($) {
     var app;
+    ($('.air-north, .air-south')).prop('checked', true);
+    ($('.sensor.air')).addClass('on');
     window.app = app = new Application;
     ($('a[rel]')).overlay({
       top: 5,

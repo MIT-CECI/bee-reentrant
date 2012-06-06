@@ -17,18 +17,10 @@
   <h1>Welcome back! Here's your data</h1>
 
   <form action="">
-    <% index = 3 %>
-    <% %w(north south east west floor ceil).each do |wall| %>
-      <% %w(interior exterior).each do |location| %>
-        <% id   = "cb-#{wall}-#{location}" %>
-        <% name = "#{wall}-#{location}" %>
-        <input type="checkbox" class="series-box" id="<%= id %>" value="<%= index + 5 %>" name="<%= name %>"/>
-        <label for="<%= id %>"><%= name %></label>
-        <% index += 1 %>
-      <% end %>
+    <% @sensors.each do |sensor, value| %>
+      <input type="checkbox" class="series-box <%= sensor %>" id="cb-<%= sensor %>" value="<%= value %>" name="<%= sensor %>"/>
+      <label for="cb-<%= sensor %>"><%= sensor %></label>
     <% end %>
-    <input type="checkbox" class="series-box" id="air-temp" checked="checked" value="2" name="External Air Temp" />
-    <label for="air-temp">External Air Temp</label>
   </form>
 
   <div class="select-series">
@@ -39,13 +31,18 @@
 
   <div class="modal" id="bee-modal">
     <div id="bee-room-modal">
-      <% %w(north south east west floor ceil).each do |wall| %>
-      <% %w(interior exterior).each do |location| %>
+      <% @walls.product(@locations).each do |wall, location| %>
       <div class="sensor <%= wall %> <%= location %>" data-checkbox="cb-<%= wall %>-<%= location %>" title="<%= location %> sensor @ <%= wall %> wall">
         <%= location[0] %><%= wall[0].upcase %>
       </div>
       <% end %>
-      <% end %>
+      <div class="sensor air north" data-checkbox="cb-air-north" title="air sensor near north wall">
+        aN
+      </div>
+
+      <div class="sensor air south" data-checkbox="cb-air-south" title="air sensor near south wall">
+        aS
+      </div>
     </div> <!-- End of sensors -->
     <div class="legend"></div>
   </div>

@@ -1,5 +1,7 @@
 $light-yellow: #FFFFE0;
 
+$air-sensors: lightblue;
+
 body{
   font-family: 'Imprima', sans-serif;
   font-size: 16px;
@@ -62,6 +64,13 @@ label,
     top: 340px;
     &.interior{ left: 25%;}
     &.exterior{ left: 35%;}
+  }
+
+  // Air sensors
+  .sensor.air{
+    top: 250px;
+    &.north{ right: 25%; top: 350px;}
+    &.south{ left: 25%;}
   }
 }
 
