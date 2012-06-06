@@ -16,7 +16,7 @@ Dependencies
 Javascript Data
 ---
 
-We need to have a `window.sampleData` matrix, like this (http://pastie.org/3775348):
+We need to have a `window.sampleData` matrix, like this:
 
 ```javascript
 
@@ -73,4 +73,19 @@ The graph container must have an id of "container"
 
 ```html
 <div id="container">Please wait while we load it. This may take a while.</div>
+```
+
+Room Sensors Image
+---
+
+If you want to add a sensor to the image, be sure to add it under the `div#bee-room-modal` element.
+
+Be sure that the `data-checkbox` points to a **valid checkbox id**.
+
+```html
+<div id="bee-room-modal">
+  <div class="sensor another-class-for-id" data-checkbox="checkbox-id" title="tooltip">
+    Sensor text
+  </div>
+</div>
 ```

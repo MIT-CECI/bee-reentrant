@@ -14,7 +14,7 @@
 
 <h2>Javascript Data</h2>
 
-<p>We need to have a <code>window.sampleData</code> matrix, like this (http://pastie.org/3775348):</p>
+<p>We need to have a <code>window.sampleData</code> matrix, like this:</p>
 
 <p>```javascript</p>
 
@@ -69,4 +69,18 @@
 
 <p><code>html
 &lt;div id=&quot;container&quot;&gt;Please wait while we load it. This may take a while.&lt;/div&gt;
+</code></p>
+
+<h2>Room Sensors Image</h2>
+
+<p>If you want to add a sensor to the image, be sure to add it under the <code>div#bee-room-modal</code> element.</p>
+
+<p>Be sure that the <code>data-checkbox</code> points to a <strong>valid checkbox id</strong>.</p>
+
+<p><code>html
+&lt;div id=&quot;bee-room-modal&quot;&gt;
+  &lt;div class=&quot;sensor another-class-for-id&quot; data-checkbox=&quot;checkbox-id&quot; title=&quot;tooltip&quot;&gt;
+    Sensor text
+  &lt;/div&gt;
+&lt;/div&gt;
 </code></p>
