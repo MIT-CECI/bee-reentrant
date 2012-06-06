@@ -17,36 +17,84 @@
   <h1>Welcome back! Here's your data</h1>
 
   <form action="">
-    
-
-    <input type="checkbox" class="series-box" id="avg-Lorem" value="5" name="Lorem"/>
-    <label for="avg-Lorem">Lorem</label>
-
-    
-
-    <input type="checkbox" class="series-box" id="avg-ipsum" value="6" name="ipsum"/>
-    <label for="avg-ipsum">ipsum</label>
-
-    
-
-    <input type="checkbox" class="series-box" id="avg-dolor" value="7" name="dolor"/>
-    <label for="avg-dolor">dolor</label>
-
-    
-
-    <input type="checkbox" class="series-box" id="avg-temp" value="8" name="Test Chamber Avg Temp"/>
-    <label for="avg-temp">Test Chamber Avg Temp</label>
-
+        <input type="checkbox" class="series-box" id="cb-north-interior" value="8" name="north-interior"/>
+        <label for="cb-north-interior">north-interior</label>
+        <input type="checkbox" class="series-box" id="cb-north-exterior" value="9" name="north-exterior"/>
+        <label for="cb-north-exterior">north-exterior</label>
+        <input type="checkbox" class="series-box" id="cb-south-interior" value="10" name="south-interior"/>
+        <label for="cb-south-interior">south-interior</label>
+        <input type="checkbox" class="series-box" id="cb-south-exterior" value="11" name="south-exterior"/>
+        <label for="cb-south-exterior">south-exterior</label>
+        <input type="checkbox" class="series-box" id="cb-east-interior" value="12" name="east-interior"/>
+        <label for="cb-east-interior">east-interior</label>
+        <input type="checkbox" class="series-box" id="cb-east-exterior" value="13" name="east-exterior"/>
+        <label for="cb-east-exterior">east-exterior</label>
+        <input type="checkbox" class="series-box" id="cb-west-interior" value="14" name="west-interior"/>
+        <label for="cb-west-interior">west-interior</label>
+        <input type="checkbox" class="series-box" id="cb-west-exterior" value="15" name="west-exterior"/>
+        <label for="cb-west-exterior">west-exterior</label>
+        <input type="checkbox" class="series-box" id="cb-floor-interior" value="16" name="floor-interior"/>
+        <label for="cb-floor-interior">floor-interior</label>
+        <input type="checkbox" class="series-box" id="cb-floor-exterior" value="17" name="floor-exterior"/>
+        <label for="cb-floor-exterior">floor-exterior</label>
+        <input type="checkbox" class="series-box" id="cb-ceil-interior" value="18" name="ceil-interior"/>
+        <label for="cb-ceil-interior">ceil-interior</label>
+        <input type="checkbox" class="series-box" id="cb-ceil-exterior" value="19" name="ceil-exterior"/>
+        <label for="cb-ceil-exterior">ceil-exterior</label>
     <input type="checkbox" class="series-box" id="air-temp" checked="checked" value="2" name="External Air Temp" />
     <label for="air-temp">External Air Temp</label>
-
-    <input type="checkbox" class="series-box" id="another-temp" value="3" name="The Best Air Temp" />
-    <label for="another-temp">Another Air Temp</label>
   </form>
+
+  <div class="select-series">
+    <a href='#' rel='#bee-modal'>Select Graphed Sensors</a>
+  </div>
 
   <div id="container">Please wait while we load it. This may take a while.</div>
 
+  <div class="modal" id="bee-modal">
+    <div id="bee-room-modal">
+      <div class="sensor north interior" data-checkbox="cb-north-interior" title="interior sensor @ north wall">
+        iN
+      </div>
+      <div class="sensor north exterior" data-checkbox="cb-north-exterior" title="exterior sensor @ north wall">
+        eN
+      </div>
+      <div class="sensor south interior" data-checkbox="cb-south-interior" title="interior sensor @ south wall">
+        iS
+      </div>
+      <div class="sensor south exterior" data-checkbox="cb-south-exterior" title="exterior sensor @ south wall">
+        eS
+      </div>
+      <div class="sensor east interior" data-checkbox="cb-east-interior" title="interior sensor @ east wall">
+        iE
+      </div>
+      <div class="sensor east exterior" data-checkbox="cb-east-exterior" title="exterior sensor @ east wall">
+        eE
+      </div>
+      <div class="sensor west interior" data-checkbox="cb-west-interior" title="interior sensor @ west wall">
+        iW
+      </div>
+      <div class="sensor west exterior" data-checkbox="cb-west-exterior" title="exterior sensor @ west wall">
+        eW
+      </div>
+      <div class="sensor floor interior" data-checkbox="cb-floor-interior" title="interior sensor @ floor wall">
+        iF
+      </div>
+      <div class="sensor floor exterior" data-checkbox="cb-floor-exterior" title="exterior sensor @ floor wall">
+        eF
+      </div>
+      <div class="sensor ceil interior" data-checkbox="cb-ceil-interior" title="interior sensor @ ceil wall">
+        iC
+      </div>
+      <div class="sensor ceil exterior" data-checkbox="cb-ceil-exterior" title="exterior sensor @ ceil wall">
+        eC
+      </div>
+    </div> <!-- End of sensors -->
+    <div class="legend"></div>
+  </div>
+
   <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+  <script src="http://cdn.jquerytools.org/1.2.7/all/jquery.tools.min.js"></script>
   <script type="text/javascript" src="scripts/vendor/underscore.js"></script>
   <script type="text/javascript" src="scripts/vendor/highstock.js"></script>
   <script type="text/javascript" src="scripts/vendor/exporting.src.js"></script>

@@ -1,5 +1,5 @@
 (function() {
-  var Application, TestChamber;
+  var Application, TestChamber, sensor;
 
   Application = (function() {
 
@@ -218,12 +218,32 @@
 
   })();
 
+  sensor = {
+    toggleSensor: function(event) {
+      var $checkbox, _id;
+      $(this).toggleClass('on');
+      _id = ($(this)).data('checkbox');
+      $checkbox = $("#" + _id);
+      return $checkbox.trigger('change').prop('checked', !$checkbox.prop('checked'));
+    }
+  };
+
   jQuery(function($) {
     var app;
     window.app = app = new Application;
-    return ($('.series-box')).live('change', function(event) {
+    ($('a[rel]')).overlay({
+      top: 5,
+      mask: {
+        color: '#000',
+        loadSpeed: 200,
+        opacity: 0.3
+      }
+    });
+    ($('sensor[title]')).tooltip();
+    ($('.series-box')).live('change', function(event) {
       return app.addSerie(this);
     });
+    return ($('.sensor')).live('click', sensor.toggleSensor);
   });
 
 }).call(this);
