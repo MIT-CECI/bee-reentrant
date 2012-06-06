@@ -12,6 +12,7 @@ Dependencies
 * jQuery 1.7.2
 * Underscore 1.3.1
 * Highstock 1.1.5
+* jQuery Tools 1.2.7
 
 Javascript Data
 ---
