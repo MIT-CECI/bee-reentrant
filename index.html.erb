@@ -17,26 +17,41 @@
   <h1>Welcome back! Here's your data</h1>
 
   <form action="">
-    <% %w(Lorem ipsum dolor).each_with_index do |word, index| %>
-
-    <input type="checkbox" class="series-box" id="avg-<%= word %>" value="<%= index + 5 %>" name="<%= word %>"/>
-    <label for="avg-<%= word %>"><%= word %></label>
-
+    <% index = 3 %>
+    <% %w(north south east west floor ceil).each do |wall| %>
+      <% %w(interior exterior).each do |location| %>
+        <% id   = "cb-#{wall}-#{location}" %>
+        <% name = "#{wall}-#{location}" %>
+        <input type="checkbox" class="series-box" id="<%= id %>" value="<%= index + 5 %>" name="<%= name %>"/>
+        <label for="<%= id %>"><%= name %></label>
+        <% index += 1 %>
+      <% end %>
     <% end %>
-
-    <input type="checkbox" class="series-box" id="avg-temp" value="8" name="Test Chamber Avg Temp"/>
-    <label for="avg-temp">Test Chamber Avg Temp</label>
-
     <input type="checkbox" class="series-box" id="air-temp" checked="checked" value="2" name="External Air Temp" />
     <label for="air-temp">External Air Temp</label>
-
-    <input type="checkbox" class="series-box" id="another-temp" value="3" name="The Best Air Temp" />
-    <label for="another-temp">Another Air Temp</label>
   </form>
+
+  <div class="select-series">
+    <a href='#' rel='#bee-modal'>Select Graphed Sensors</a>
+  </div>
 
   <div id="container">Please wait while we load it. This may take a while.</div>
 
+  <div class="modal" id="bee-modal">
+    <div id="bee-room-modal">
+      <% %w(north south east west floor ceil).each do |wall| %>
+      <% %w(interior exterior).each do |location| %>
+      <div class="sensor <%= wall %> <%= location %>" data-checkbox="cb-<%= wall %>-<%= location %>" title="<%= location %> sensor @ <%= wall %> wall">
+        <%= location[0] %><%= wall[0].upcase %>
+      </div>
+      <% end %>
+      <% end %>
+    </div> <!-- End of sensors -->
+    <div class="legend"></div>
+  </div>
+
   <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+  <script src="http://cdn.jquerytools.org/1.2.7/all/jquery.tools.min.js"></script>
   <script type="text/javascript" src="scripts/vendor/underscore.js"></script>
   <script type="text/javascript" src="scripts/vendor/highstock.js"></script>
   <script type="text/javascript" src="scripts/vendor/exporting.src.js"></script>

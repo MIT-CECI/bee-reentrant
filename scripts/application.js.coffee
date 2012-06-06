@@ -158,6 +158,21 @@ window.TestChamber = class TestChamber
       series: _.map( seriesNames, (name, index) ->
         { name: name, data: preparedData[index] } )
 
+sensor =
+  toggleSensor: (event) ->
+    $(this).toggleClass('on')
+    _id = ($ this).data('checkbox')
+    $checkbox = ($ "##{_id}")
+    $checkbox.trigger('change').prop('checked', !$checkbox.prop('checked'))
+
 jQuery ($) ->
   window.app = app = new Application
+  ($ 'a[rel]').overlay
+    top: 5
+    mask:
+      color: '#000'
+      loadSpeed: 200
+      opacity: 0.3
+  ($ 'sensor[title]').tooltip()
   ($ '.series-box').live 'change', (event) -> app.addSerie(this)
+  ($ '.sensor').live 'click', sensor.toggleSensor

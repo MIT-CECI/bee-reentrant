@@ -1,13 +1,78 @@
+$light-yellow: #FFFFE0;
+
 body{
   font-family: 'Imprima', sans-serif;
   font-size: 16px;
 }
 
+label,
+.series-box,
 .hidden{ display: none; }
 
-#data-holder{
-  height: 500px;
-  width: 960px;
-  overflow-y: scroll;
-  overflow-x: auto;
+#bee-room-modal{
+  width: 600px;
+  height: 600px;
+  position: relative;
+  background: transparent url(../images/bee-room.png) top left no-repeat;
+  margin: 0 auto;
+  .sensor{
+    font-family: 'Helvetica', sans-serif;
+    width: 40px; height: 40px;
+    text-align: center; line-height: 40px; vertical-align: middle;
+    border: 1px solid gray;
+    position: absolute;
+    cursor: pointer;
+    background: white;
+    &.on {background: darken($light-yellow, 3%);}
+  }
+
+  .sensor.ceil{
+    top: 120px;
+    &.interior{ left: 35%; }
+    &.exterior{ left: 55%;}
+  }
+
+  .sensor.floor{
+    bottom: 100px;
+    &.interior{ left: 55%; }
+    &.exterior{ left: 65%;}
+  }
+
+  // Glass window (PDF page 197)
+  .sensor.south{
+    bottom: 220px;
+    &.interior{ left: 13%; bottom: 260px;}
+    &.exterior{ left: 5%;}
+  }
+
+  // The door wall
+  .sensor.north{
+    top: 260px;
+    &.interior{ right: 13%; top: 310px;}
+    &.exterior{ right: 5%;}
+  }
+
+  .sensor.east{
+    top: 240px;
+    &.interior{ left: 55%;}
+    &.exterior{ left: 65%;}
+  }
+
+  .sensor.west{
+    top: 340px;
+    &.interior{ left: 25%;}
+    &.exterior{ left: 35%;}
+  }
+}
+
+///////// MODAL CSS STYLES ///////////
+.modal {
+  display:none;
+  z-index:10000;
+  background-color:#FFF;
+
+  width:675px;
+  min-height:670px;
+  border:1px solid #666;
+  text-align: center;
 }
