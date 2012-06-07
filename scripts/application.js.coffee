@@ -13,8 +13,14 @@ class Application
     baseSerie = chart.xAxis[0]
     extremes = baseSerie.getExtremes()
     indexes = @getIndexes(extremes)
-    ($ '#data-holder').text @extractData(indexes[0], indexes[1]).toString()
-    ($ '.hidden').show()
+
+    ($ 'input#min').val(window.sampleData[indexes[0]][0])
+    ($ 'input#max').val(window.sampleData[indexes[1]][0])
+    ($ 'input#sensors').val(@getSelectedSensors())
+
+  getSelectedSensors: ->
+    _.map ($ @chamber.seriesSelector), (checkbox, index) ->
+      checkbox.value
 
   # Returns an array with the data [`from`, `to`] in the original array
   extractData: (from, to) -> window.sampleData[i] for i in [from..to]
@@ -177,6 +183,7 @@ jQuery ($) ->
       color: '#000'
       loadSpeed: 200
       opacity: 0.3
+
   ($ 'sensor[title]').tooltip()
   ($ '.series-box').live 'change', (event) -> app.addSerie(this)
   ($ '.sensor').live 'click', sensor.toggleSensor

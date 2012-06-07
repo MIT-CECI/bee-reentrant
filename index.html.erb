@@ -10,32 +10,40 @@
   <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
   <![endif]-->
   <link href='http://fonts.googleapis.com/css?family=Imprima' rel='stylesheet' type='text/css'>
-  <link href='/styles/application.css' rel='stylesheet' type='text/css'>
+  <link href='styles/application.css' rel='stylesheet' type='text/css'>
 </head>
 
 <body>
   <h1>Welcome back! Here's your data</h1>
 
   <form action="">
-    <% @sensors.each do |sensor, value| %>
+<% @sensors.each do |sensor, value| %>
       <input type="checkbox" class="series-box <%= sensor %>" id="cb-<%= sensor %>" value="<%= value %>" name="<%= sensor %>"/>
       <label for="cb-<%= sensor %>"><%= sensor %></label>
-    <% end %>
+
+<% end %>
   </form>
 
   <div class="select-series">
     <a href='#' rel='#bee-modal'>Select Graphed Sensors</a>
+
+    <input type='hidden' name='min' id='min' value='' />
+    <input type='hidden' name='max' id='max' value='' />
+    <input type='hidden' name='sensors' id='sensors' value='' />
+
   </div>
 
   <div id="container">Please wait while we load it. This may take a while.</div>
 
   <div class="modal" id="bee-modal">
     <div id="bee-room-modal">
-      <% @walls.product(@locations).each do |wall, location| %>
+<% @walls.product(@locations).each do |wall, location| %>
       <div class="sensor <%= wall %> <%= location %>" data-checkbox="cb-<%= wall %>-<%= location %>" title="<%= location %> sensor @ <%= wall %> wall">
         <%= location[0] %><%= wall[0].upcase %>
       </div>
-      <% end %>
+
+<% end %>
+
       <div class="sensor air north" data-checkbox="cb-air-north" title="air sensor near north wall">
         aN
       </div>
