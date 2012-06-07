@@ -23,8 +23,15 @@
       baseSerie = chart.xAxis[0];
       extremes = baseSerie.getExtremes();
       indexes = this.getIndexes(extremes);
-      ($('#data-holder')).text(this.extractData(indexes[0], indexes[1]).toString());
-      return ($('.hidden')).show();
+      ($('input#min')).val(window.sampleData[indexes[0]][0]);
+      ($('input#max')).val(window.sampleData[indexes[1]][0]);
+      return ($('input#sensors')).val(this.getSelectedSensors());
+    };
+
+    Application.prototype.getSelectedSensors = function() {
+      return _.map($(this.chamber.seriesSelector), function(checkbox, index) {
+        return checkbox.value;
+      });
     };
 
     Application.prototype.extractData = function(from, to) {
