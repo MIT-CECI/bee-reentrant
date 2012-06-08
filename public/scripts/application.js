@@ -29,10 +29,11 @@
       ($('input#min')).val(window.sampleData[indexes[0]][0]);
       ($('input#max')).val(window.sampleData[indexes[1]][0]);
       if (select_all) {
-        return ($('input#sensors')).val("");
+        ($('input#sensors')).val("");
       } else {
-        return ($('input#sensors')).val(this.getSelectedSensors(select_all));
+        ($('input#sensors')).val(this.getSelectedSensors(select_all));
       }
+      return $('#btnDownload').click();
     };
 
     Application.prototype.getSelectedSensors = function() {
@@ -269,6 +270,7 @@
         opacity: 0.3
       }
     });
+    ($('#btnDownload')).hide();
     ($('sensor[title]')).tooltip();
     ($('.series-box')).live('change', function(event) {
       return app.addSerie(this);

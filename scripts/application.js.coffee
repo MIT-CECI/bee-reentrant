@@ -20,6 +20,8 @@ class Application
       ($ 'input#sensors').val("")
     else
       ($ 'input#sensors').val(@getSelectedSensors(select_all))
+    $('#btnDownload').click()
+
 
   getSelectedSensors: ->
     _.map ($ @chamber.seriesSelector), (checkbox, index) ->
@@ -201,6 +203,7 @@ jQuery ($) ->
       loadSpeed: 200
       opacity: 0.3
 
+  ($ '#btnDownload').hide()
   ($ 'sensor[title]').tooltip()
   ($ '.series-box').live 'change', (event) -> app.addSerie(this)
   ($ '.sensor').live 'click', sensor.toggleSensor
