@@ -8,7 +8,7 @@ class Application
   # index of the array it points to.
   addSerie: (name, index) -> @chamber.addSerie(name, index)
 
-  exportData: ->
+  exportData: (select_all = true) ->
     chart = @chamber.chart
     baseSerie = chart.xAxis[0]
     extremes = baseSerie.getExtremes()
@@ -16,7 +16,10 @@ class Application
 
     ($ 'input#min').val(window.sampleData[indexes[0]][0])
     ($ 'input#max').val(window.sampleData[indexes[1]][0])
-    ($ 'input#sensors').val(@getSelectedSensors())
+    if select_all
+      ($ 'input#sensors').val("")
+    else
+      ($ 'input#sensors').val(@getSelectedSensors(select_all))
 
   getSelectedSensors: ->
     _.map ($ @chamber.seriesSelector), (checkbox, index) ->
@@ -117,13 +120,26 @@ window.TestChamber = class TestChamber
         defaultSeriesType: 'line'
         zoomType: 'x'
 
+      lang:
+        dataExportButton: 'Download CSV data'
+
       exporting:
         filename: "BEE Chart"
         width: 1300
         buttons:
           dataExportButton:
+            menuItems:[
+              {
+                text: 'Export all sensors'
+                onclick: -> window.app.exportData()
+              }
+
+              {
+                text: 'Export selected sensors'
+                onclick: -> window.app.exportData(false)
+              }
+            ]
             hoverSymbolFill: '#768F3E',
-            onclick: -> window.app.exportData()
             symbol: 'exportIcon'
             align: 'right',
             x: -62

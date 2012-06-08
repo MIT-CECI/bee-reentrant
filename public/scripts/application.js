@@ -17,15 +17,22 @@
       return this.chamber.addSerie(name, index);
     };
 
-    Application.prototype.exportData = function() {
+    Application.prototype.exportData = function(select_all) {
       var baseSerie, chart, extremes, indexes;
+      if (select_all == null) {
+        select_all = true;
+      }
       chart = this.chamber.chart;
       baseSerie = chart.xAxis[0];
       extremes = baseSerie.getExtremes();
       indexes = this.getIndexes(extremes);
       ($('input#min')).val(window.sampleData[indexes[0]][0]);
       ($('input#max')).val(window.sampleData[indexes[1]][0]);
-      return ($('input#sensors')).val(this.getSelectedSensors());
+      if (select_all) {
+        return ($('input#sensors')).val("");
+      } else {
+        return ($('input#sensors')).val(this.getSelectedSensors(select_all));
+      }
     };
 
     Application.prototype.getSelectedSensors = function() {
@@ -157,15 +164,28 @@
           defaultSeriesType: 'line',
           zoomType: 'x'
         },
+        lang: {
+          dataExportButton: 'Download CSV data'
+        },
         exporting: {
           filename: "BEE Chart",
           width: 1300,
           buttons: {
             dataExportButton: {
+              menuItems: [
+                {
+                  text: 'Export all sensors',
+                  onclick: function() {
+                    return window.app.exportData();
+                  }
+                }, {
+                  text: 'Export selected sensors',
+                  onclick: function() {
+                    return window.app.exportData(false);
+                  }
+                }
+              ],
               hoverSymbolFill: '#768F3E',
-              onclick: function() {
-                return window.app.exportData();
-              },
               symbol: 'exportIcon',
               align: 'right',
               x: -62
