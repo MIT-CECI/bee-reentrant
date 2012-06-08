@@ -128,6 +128,7 @@ window.TestChamber = class TestChamber
         width: 1300
         buttons:
           dataExportButton:
+            _titleKey: 'dataExportButton'
             menuItems:[
               {
                 text: 'Export all sensors'
