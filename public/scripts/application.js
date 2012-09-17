@@ -1,11 +1,20 @@
 (function() {
-  var Application, TestChamber, sensor;
+  var Application, PusherListener, TestChamber, sensor;
+
+  window.BEE = {
+    version: '3.0.0.alpha'
+  };
 
   Application = (function() {
 
     function Application() {
       this.chamber = new TestChamber;
+      this.pusherListener = new PusherListener('experiment-channel', this);
     }
+
+    Application.prototype.pusherListener = function() {
+      return this.pusherListener;
+    };
 
     Application.prototype.chamber = function() {
       return this.chamber;
@@ -86,6 +95,23 @@
       this.initializeChart();
       this.memoSeries();
     }
+
+    TestChamber.prototype.addNewMeassurement = function() {
+      var data,
+        _this = this;
+      data = window.sampleData[window.sampleData.length - 1];
+      _.each(this.chart.series, function(serie, index) {
+        var checkbox, date, temp;
+        if (serie.name !== "Navigator") {
+          checkbox = $("#cb-" + serie.name);
+          date = Date.parse(data[1]);
+          temp = data[parseInt(checkbox.val())];
+          return serie.addPoint([date, temp], false);
+        }
+      });
+      this.chart.redraw();
+      return true;
+    };
 
     TestChamber.prototype.prepareOneSerie = function(index) {
       return _.map(window.sampleData, function(data) {
@@ -252,6 +278,30 @@
       return $checkbox.trigger('change').prop('checked', !$checkbox.prop('checked'));
     }
   };
+
+  PusherListener = (function() {
+
+    function PusherListener(channel, app) {
+      this.pusher = new Pusher('b46f3ea8632aaeb34706');
+      this.channel = this.pusher.subscribe(channel);
+      this.app = app;
+      this._setupListeners();
+    }
+
+    PusherListener.prototype._addRawDataRow = function(rawRow) {
+      return window.sampleData.push(rawRow);
+    };
+
+    PusherListener.prototype._setupListeners = function() {
+      var _this = this;
+      return this.channel.bind('meassurement-added', function(data) {
+        return typeof console !== "undefined" && console !== null ? console.log(data, "pusher message") : void 0;
+      });
+    };
+
+    return PusherListener;
+
+  })();
 
   jQuery(function($) {
     var app;

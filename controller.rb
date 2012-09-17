@@ -1,6 +1,6 @@
 ignore /\.git/
 ignore /\/_.*/
-ignore /(Procfile|Gemfile|README*|config\.ru)/
+ignore /(Procfile|Gemfile|README*|config\.ru|pusher_test\.rb)/
 
 before /.*html\.erb/ do
   #{wall}-#{location}

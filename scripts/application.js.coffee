@@ -1,7 +1,14 @@
-# Version 2.0.0
+window.BEE = {
+  version: '3.0.0.alpha'
+}
 
 class Application
-  constructor: -> @chamber = new TestChamber
+  constructor: ->
+    @chamber = new TestChamber
+    @pusherListener = new PusherListener('experiment-channel', this)
+
+  pusherListener: -> @pusherListener
+
   chamber: -> @chamber
 
   # Public API for adding a serie. Receives the name of the serie and the
@@ -68,6 +75,24 @@ window.TestChamber = class TestChamber
     @series = []
     @initializeChart()
     @memoSeries()
+
+
+  # Adds the last row in the `window.sampleData` array to the series and draws
+  # the chart again. Use this after a Pusher event has happened and we have a
+  # new meassurement.
+  addNewMeassurement: ->
+    data = window.sampleData[window.sampleData.length - 1]
+    _.each @chart.series, (serie, index) =>
+      # console?.log(serie.name, "index on raw data => ",
+      #     parseInt(checkbox.val()), "Date: #{Date.parse(data[1])}",
+      #     "Temp: #{data[parseInt checkbox.val()]}" )
+      if serie.name != "Navigator"
+        checkbox = $("#cb-#{serie.name}")
+        date = Date.parse(data[1])
+        temp = data[parseInt checkbox.val()]
+        serie.addPoint([date, temp], false)
+    @chart.redraw()
+    true
 
   # Takes one sensor index and prepares the series data to graph it.
   # The index is the sensor's index on the raw data array.
@@ -194,11 +219,30 @@ sensor =
     $checkbox = ($ "##{_id}")
     $checkbox.trigger('change').prop('checked', !$checkbox.prop('checked'))
 
+class PusherListener
+  constructor: (channel, app) ->
+    @pusher  = new Pusher('b46f3ea8632aaeb34706')
+    @channel = @pusher.subscribe(channel)
+    @app = app
+    @_setupListeners()
+
+
+  _addRawDataRow: (rawRow) -> window.sampleData.push(rawRow)
+
+  _setupListeners: ->
+    @channel.bind 'meassurement-added', (data) =>
+      console?.log(data, "pusher message")
+      # @_addRawDataRow(data['rawData'])
+      # @app.chamber.addNewMeassurement()
+
+
+
 jQuery ($) ->
   ($ '.air-north, .air-south').prop('checked', true)
   ($ '.sensor.air').addClass('on')
 
   window.app = app = new Application
+
   ($ 'a[rel]').overlay
     top: 5
     mask:
