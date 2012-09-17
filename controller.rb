@@ -1,3 +1,7 @@
+ignore /\.git/
+ignore /\/_.*/
+ignore /(Procfile|Gemfile|README*|config\.ru)/
+
 before /.*html\.erb/ do
   #{wall}-#{location}
   @walls = %w(north south east west floor ceil)
@@ -22,7 +26,7 @@ end
 
 # @walls = %w(north south east west floor ceil)
 # @locations = %w(interior exterior)
-# 
+#
 # @walls.product(@locations).each do |s|
 #   puts "'#{s.join("-")}' => "
 # end

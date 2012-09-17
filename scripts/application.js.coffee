@@ -56,6 +56,9 @@ class Application
     # Since the data can be average, get the previous  valid meassurement
     low - 1
 
+
+
+
 window.TestChamber = class TestChamber
   seriesSelector: '.series-box:checked'
 
@@ -103,7 +106,7 @@ window.TestChamber = class TestChamber
   addSerie: (checkbox) ->
     name  = checkbox.name
     index = checkbox.value
-    if @series[name]?
+    if @series[name]? # if the series is already memoized
       @toggleSerie(name)
     else
       @memoSerie(name)

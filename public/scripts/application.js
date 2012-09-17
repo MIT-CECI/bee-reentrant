@@ -3,8 +3,6 @@
 
   Application = (function() {
 
-    Application.name = 'Application';
-
     function Application() {
       this.chamber = new TestChamber;
     }
@@ -78,8 +76,6 @@
   })();
 
   window.TestChamber = TestChamber = (function() {
-
-    TestChamber.name = 'TestChamber';
 
     TestChamber.prototype.seriesSelector = '.series-box:checked';
 
