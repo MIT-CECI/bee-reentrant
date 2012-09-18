@@ -295,7 +295,8 @@
     PusherListener.prototype._setupListeners = function() {
       var _this = this;
       return this.channel.bind('meassurement-added', function(data) {
-        return typeof console !== "undefined" && console !== null ? console.log(data, "pusher message") : void 0;
+        _this._addRawDataRow(data['rawData']);
+        return _this.app.chamber.addNewMeassurement();
       });
     };
 
