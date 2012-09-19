@@ -8,12 +8,6 @@ Pusher.app_id = ENV['PUSHER_APP']
 Pusher.key = ENV['PUSHER_KEY']
 Pusher.secret = ENV['PUSHER_SECRET']
 
-total = array_matrix.size
-array_matrix.each_with_index do |array_row, i|
-  puts "Sending row #{i + 1} / #{total}"
-  Pusher['experiment-channel'].trigger('meassurement-added', {rawData: array_row})
-  sleep(5)
-end
 
 def array_matrix
   [
@@ -127,3 +121,9 @@ def array_matrix
   ]
 end
 
+total = array_matrix.size
+array_matrix.each_with_index do |array_row, i|
+  puts "Sending row #{i + 1} / #{total}"
+  Pusher['experiment-channel'].trigger('meassurement-added', {rawData: array_row})
+  sleep(5)
+end
