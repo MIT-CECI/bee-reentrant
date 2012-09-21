@@ -295,8 +295,12 @@
     PusherListener.prototype._setupListeners = function() {
       var _this = this;
       return this.channel.bind('meassurement-added', function(data) {
+        data = data.replace(/'/g, '"');
         if (typeof console !== "undefined" && console !== null) {
-          console.log(data, "pusher message");
+          console.log(data);
+        }
+        if (typeof console !== "undefined" && console !== null) {
+          console.log(jQuery.parseJSON(data));
         }
         return true;
       });

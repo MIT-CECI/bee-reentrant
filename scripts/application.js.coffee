@@ -231,7 +231,9 @@ class PusherListener
 
   _setupListeners: ->
     @channel.bind 'meassurement-added', (data) =>
-      console?.log(data, "pusher message")
+      data = data.replace(/'/g, '"')
+      console?.log(data)
+      console?.log(jQuery.parseJSON(data))
       # @_addRawDataRow(eval(data['rawData']))
       # @app.chamber.addNewMeassurement()
       true
