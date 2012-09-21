@@ -298,8 +298,7 @@
         if (typeof console !== "undefined" && console !== null) {
           console.log(data, "pusher message");
         }
-        _this._addRawDataRow(eval(data['rawData']));
-        return _this.app.chamber.addNewMeassurement();
+        return true;
       });
     };
 
