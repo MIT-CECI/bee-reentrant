@@ -90,3 +90,12 @@ Be sure that the `data-checkbox` points to a **valid checkbox id**.
   </div>
 </div>
 ```
+
+
+## Pusher
+
+In javascript, we'll be reading the Pusher channel from:
+
+```javascript
+window.pusherChannel = 'some-pusher-channel';
+```
