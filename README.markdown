@@ -99,3 +99,6 @@ In javascript, we'll be reading the Pusher channel from:
 ```javascript
 window.pusherChannel = 'some-pusher-channel';
 ```
+
+The event we're using is `meassurement-added`
+
