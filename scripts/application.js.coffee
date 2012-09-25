@@ -4,8 +4,9 @@ window.BEE = {
 
 class Application
   constructor: ->
+    experimentChannel = window.pusherChannel?= 'experiment-channel'
     @chamber = new TestChamber
-    @pusherListener = new PusherListener('experiment-channel', this)
+    @pusherListener = new PusherListener(experimentChannel, this)
 
   pusherListener: -> @pusherListener
 
@@ -21,12 +22,12 @@ class Application
     extremes = baseSerie.getExtremes()
     indexes = @getIndexes(extremes)
 
-    ($ 'input#min').val(window.sampleData[indexes[0]][0])
-    ($ 'input#max').val(window.sampleData[indexes[1]][0])
+    $('input#hdnMin').val(window.sampleData[indexes[0]][0])
+    $('input#hdnMax').val(window.sampleData[indexes[1]][0])
     if select_all
-      ($ 'input#sensors').val("")
+      $('input#hdnSensors').val("")
     else
-      ($ 'input#sensors').val(@getSelectedSensors(select_all))
+      $('input#hdnSensors').val(@getSelectedSensors(select_all))
     $('#btnDownload').click()
 
 
@@ -62,8 +63,6 @@ class Application
         return mid
     # Since the data can be average, get the previous  valid meassurement
     low - 1
-
-
 
 
 window.TestChamber = class TestChamber
@@ -231,9 +230,13 @@ class PusherListener
 
   _setupListeners: ->
     @channel.bind 'meassurement-added', (data) =>
-      data = data.replace(/'/g, '"')
-      console?.log(data)
-      console?.log(jQuery.parseJSON(data))
+      console?.log(data, "raw data from server")
+      if typeof(data) == "string"
+        data = data.replace(/'/g, '"')
+        data = jQuery.parseJSON(data)
+
+      console?.log(data, "parsed data")
+
       # @_addRawDataRow(eval(data['rawData']))
       # @app.chamber.addNewMeassurement()
       true
@@ -241,8 +244,8 @@ class PusherListener
 
 
 jQuery ($) ->
-  ($ '.air-north, .air-south').prop('checked', true)
-  ($ '.sensor.air').addClass('on')
+  $('.air-north, .air-south').prop('checked', true)
+  $('.sensor.air').addClass('on')
 
   window.app = app = new Application
 
@@ -253,7 +256,7 @@ jQuery ($) ->
       loadSpeed: 200
       opacity: 0.3
 
-  ($ '#btnDownload').hide()
-  ($ 'sensor[title]').tooltip()
-  ($ '.series-box').live 'change', (event) -> app.addSerie(this)
-  ($ '.sensor').live 'click', sensor.toggleSensor
+  $('#btnDownload').hide()
+  $('sensor[title]').tooltip()
+  $('.series-box').live 'change', (event) -> app.addSerie(this)
+  $('.sensor').live 'click', sensor.toggleSensor

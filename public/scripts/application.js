@@ -8,8 +8,10 @@
   Application = (function() {
 
     function Application() {
+      var experimentChannel, _ref;
+      experimentChannel = (_ref = window.pusherChannel) != null ? _ref : window.pusherChannel = 'experiment-channel';
       this.chamber = new TestChamber;
-      this.pusherListener = new PusherListener('experiment-channel', this);
+      this.pusherListener = new PusherListener(experimentChannel, this);
     }
 
     Application.prototype.pusherListener = function() {
@@ -33,12 +35,12 @@
       baseSerie = chart.xAxis[0];
       extremes = baseSerie.getExtremes();
       indexes = this.getIndexes(extremes);
-      ($('input#min')).val(window.sampleData[indexes[0]][0]);
-      ($('input#max')).val(window.sampleData[indexes[1]][0]);
+      $('input#hdnMin').val(window.sampleData[indexes[0]][0]);
+      $('input#hdnMax').val(window.sampleData[indexes[1]][0]);
       if (select_all) {
-        ($('input#sensors')).val("");
+        $('input#hdnSensors').val("");
       } else {
-        ($('input#sensors')).val(this.getSelectedSensors(select_all));
+        $('input#hdnSensors').val(this.getSelectedSensors(select_all));
       }
       return $('#btnDownload').click();
     };
@@ -295,12 +297,15 @@
     PusherListener.prototype._setupListeners = function() {
       var _this = this;
       return this.channel.bind('meassurement-added', function(data) {
-        data = data.replace(/'/g, '"');
         if (typeof console !== "undefined" && console !== null) {
-          console.log(data);
+          console.log(data, "raw data from server");
+        }
+        if (typeof data === "string") {
+          data = data.replace(/'/g, '"');
+          data = jQuery.parseJSON(data);
         }
         if (typeof console !== "undefined" && console !== null) {
-          console.log(jQuery.parseJSON(data));
+          console.log(data, "parsed data");
         }
         return true;
       });
@@ -312,8 +317,8 @@
 
   jQuery(function($) {
     var app;
-    ($('.air-north, .air-south')).prop('checked', true);
-    ($('.sensor.air')).addClass('on');
+    $('.air-north, .air-south').prop('checked', true);
+    $('.sensor.air').addClass('on');
     window.app = app = new Application;
     ($('a[rel]')).overlay({
       top: 5,
@@ -323,12 +328,12 @@
         opacity: 0.3
       }
     });
-    ($('#btnDownload')).hide();
-    ($('sensor[title]')).tooltip();
-    ($('.series-box')).live('change', function(event) {
+    $('#btnDownload').hide();
+    $('sensor[title]').tooltip();
+    $('.series-box').live('change', function(event) {
       return app.addSerie(this);
     });
-    return ($('.sensor')).live('click', sensor.toggleSensor);
+    return $('.sensor').live('click', sensor.toggleSensor);
   });
 
 }).call(this);
