@@ -94,8 +94,11 @@
       this.chart = 0;
       this.maxPoints = 60;
       this.series = [];
-      this.initializeChart();
-      this.memoSeries();
+      this.chartInitialized = false;
+      if (window.sampleData.length !== 0) {
+        this.initializeChart();
+        this.memoSeries();
+      }
     }
 
     TestChamber.prototype.addNewMeassurement = function() {
@@ -179,11 +182,26 @@
       return _.pluck($(this.seriesSelector), 'name');
     };
 
+    TestChamber.prototype.pusherEventReceived = function() {
+      if (window.sampleData.size !== 0 && !this.chartInitialized) {
+        if (typeof console !== "undefined" && console !== null) {
+          console.log("First data received");
+        }
+        this.initializeChart();
+        return this.memoSeries();
+      } else {
+        if (typeof console !== "undefined" && console !== null) {
+          console.log("Adding a new meassurement");
+        }
+        return this.addNewMeassurement();
+      }
+    };
+
     TestChamber.prototype.initializeChart = function() {
       var preparedData, seriesNames;
       preparedData = this.prepareData();
       seriesNames = this.getSeriesNames();
-      return this.chart = new Highcharts.StockChart({
+      this.chart = new Highcharts.StockChart({
         chart: {
           renderTo: 'container',
           defaultSeriesType: 'line',
@@ -265,6 +283,7 @@
           };
         })
       });
+      return this.chartInitialized = this.chart !== 0;
     };
 
     return TestChamber;
@@ -297,16 +316,12 @@
     PusherListener.prototype._setupListeners = function() {
       var _this = this;
       return this.channel.bind('meassurement-added', function(data) {
-        if (typeof console !== "undefined" && console !== null) {
-          console.log(data, "raw data from server");
-        }
         if (typeof data === "string") {
           data = data.replace(/'/g, '"');
           data = jQuery.parseJSON(data);
         }
-        if (typeof console !== "undefined" && console !== null) {
-          console.log(data, "parsed data");
-        }
+        _this._addRawDataRow(data['rawData']);
+        _this.app.chamber.pusherEventReceived();
         return true;
       });
     };

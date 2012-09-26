@@ -72,8 +72,11 @@ window.TestChamber = class TestChamber
     @chart = 0
     @maxPoints = 60
     @series = []
-    @initializeChart()
-    @memoSeries()
+    @chartInitialized = false
+
+    if window.sampleData.length != 0
+      @initializeChart()
+      @memoSeries()
 
 
   # Adds the last row in the `window.sampleData` array to the series and draws
@@ -140,7 +143,17 @@ window.TestChamber = class TestChamber
   getSeriesNames: ->
     _.pluck $(@seriesSelector), 'name'
 
+  pusherEventReceived: ->
+    if window.sampleData.size != 0 && !@chartInitialized
+      console?.log("First data received")
+      @initializeChart()
+      @memoSeries()
+    else
+      console?.log("Adding a new meassurement")
+      @addNewMeassurement()
+
   initializeChart: ->
+    # console?.log("Initializing Chart")
     preparedData = @prepareData()
     seriesNames  = @getSeriesNames()
     @chart = new Highcharts.StockChart
@@ -211,6 +224,8 @@ window.TestChamber = class TestChamber
       series: _.map( seriesNames, (name, index) ->
         { name: name, data: preparedData[index] } )
 
+    @chartInitialized = (@chart != 0)
+
 sensor =
   toggleSensor: (event) ->
     $(this).toggleClass('on')
@@ -230,15 +245,16 @@ class PusherListener
 
   _setupListeners: ->
     @channel.bind 'meassurement-added', (data) =>
-      console?.log(data, "raw data from server")
+      # console?.log(data, "raw data from server")
+
       if typeof(data) == "string"
         data = data.replace(/'/g, '"')
         data = jQuery.parseJSON(data)
 
-      console?.log(data, "parsed data")
+      # console?.log(data, "parsed data")
 
-      # @_addRawDataRow(eval(data['rawData']))
-      # @app.chamber.addNewMeassurement()
+      @_addRawDataRow(data['rawData'])
+      @app.chamber.pusherEventReceived()
       true
 
 
