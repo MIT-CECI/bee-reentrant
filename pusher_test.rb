@@ -121,9 +121,12 @@ def array_matrix
   ]
 end
 
+pusher_channel = '194319FA5FC3458923C99529561CC6'
+pusher_channel = 'experiment-channel'
+
 total = array_matrix.size
 array_matrix.each_with_index do |array_row, i|
   puts "Sending row #{i + 1} / #{total}"
-  Pusher['experiment-channel'].trigger('meassurement-added', {rawData: array_row})
+  Pusher[pusher_channel].trigger('meassurement-added', {rawData: array_row})
   sleep(5)
 end
