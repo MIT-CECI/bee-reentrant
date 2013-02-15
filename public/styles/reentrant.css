@@ -11,7 +11,7 @@ label,
   width: 600px;
   height: 600px;
   position: relative;
-  background: transparent url(../images/bee-room.png) top left no-repeat;
+  background: transparent url("/images/bee-room.png") top left no-repeat;
   margin: 0 auto; }
   #bee-room-modal .sensor {
     font-family: 'Helvetica', sans-serif;
