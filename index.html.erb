@@ -20,7 +20,6 @@
 <% @sensors.each do |sensor, value| %>
       <input type="checkbox" class="series-box <%= sensor %>" id="cb-<%= sensor %>" value="<%= value %>" name="<%= sensor %>"/>
       <label for="cb-<%= sensor %>"><%= sensor %></label>
-
 <% end %>
   </form>
 
@@ -41,7 +40,6 @@
       <div class="sensor <%= wall %> <%= location %>" data-checkbox="cb-<%= wall %>-<%= location %>" title="<%= location %> sensor @ <%= wall %> wall">
         <%= location[0] %><%= wall[0].upcase %>
       </div>
-
 <% end %>
 
       <div class="sensor air north" data-checkbox="cb-air-north" title="air sensor near north wall">
@@ -50,6 +48,10 @@
 
       <div class="sensor air south" data-checkbox="cb-air-south" title="air sensor near south wall">
         aS
+      </div>
+
+      <div class="sensor total-wattz" data-checkbox="cb-total-wattz" title="total wattage on the room">
+        Total Wattz
       </div>
     </div> <!-- End of sensors -->
     <div class="legend"></div>

@@ -21,6 +21,7 @@ before /.*html\.erb/ do
     'ceil-exterior'   => 19,
     'air-north'       => 66,
     'air-south'       => 42,
+    'total-wattz'     => 81
   }
 end
 

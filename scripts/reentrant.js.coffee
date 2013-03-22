@@ -1,5 +1,5 @@
 window.BEE = {
-  version: '3.0.0.alpha'
+  version: '3.1.0'
 }
 
 class Application
@@ -22,8 +22,8 @@ class Application
     extremes = baseSerie.getExtremes()
     indexes = @getIndexes(extremes)
 
-    $('input#hdnMin').val(window.sampleData[indexes[0]][0])
-    $('input#hdnMax').val(window.sampleData[indexes[1]][0])
+    $('input#hdnMin').val(indexes[0])
+    $('input#hdnMax').val(indexes[1])
     if select_all
       $('input#hdnSensors').val("")
     else
@@ -54,7 +54,7 @@ class Application
     high = window.sampleData.length - 1
     while( high >= low )
       mid = Math.floor((low + high) / 2)
-      time = Date.parse(window.sampleData[mid][1])
+      time = Date.parse(window.sampleData[mid][0])
       if time > timestamp
         high = mid - 1
       else if time < timestamp
@@ -90,7 +90,7 @@ window.TestChamber = class TestChamber
       #     "Temp: #{data[parseInt checkbox.val()]}" )
       if serie.name != "Navigator"
         checkbox = $("#cb-#{serie.name}")
-        date = Date.parse(data[1])
+        date = Date.parse(data[0])
         temp = data[parseInt checkbox.val()]
         serie.addPoint([date, temp], false)
     @chart.redraw()
@@ -99,12 +99,13 @@ window.TestChamber = class TestChamber
   # Takes one sensor index and prepares the series data to graph it.
   # The index is the sensor's index on the raw data array.
   prepareOneSerie: (index) ->
-    _.map window.sampleData, (data) -> [Date.parse(data[1]), data[index]]
+    _.map window.sampleData, (data) -> [Date.parse(data[0]), data[index]]
 
   # For each checked checkbox, prepare that one serie and add it to an array
   # This will be used to create the chart the first time.
   prepareData: ->
-    _.map $(@seriesSelector), (checkbox) => @prepareOneSerie(checkbox.value)
+    results = (_.map $(@seriesSelector), (checkbox) => @prepareOneSerie(checkbox.value))
+    results
 
   chart:  -> @chart
   series: -> @series
@@ -137,7 +138,13 @@ window.TestChamber = class TestChamber
       @toggleSerie(name)
     else
       @memoSerie(name)
-      @chart.addSeries({name: name, data: @prepareOneSerie(index)})
+      @chart.addSeries(
+        {
+          name: name,
+          data: @prepareOneSerie(index)
+          yAxis: (if !!name.match(/wattz/i) then 1 else 0)
+        }
+      )
 
   # Returns an array with the names of all the series.
   getSeriesNames: ->
@@ -145,15 +152,12 @@ window.TestChamber = class TestChamber
 
   pusherEventReceived: ->
     if window.sampleData.size != 0 && !@chartInitialized
-      console?.log("First data received")
       @initializeChart()
       @memoSeries()
     else
-      console?.log("Adding a new meassurement")
       @addNewMeassurement()
 
   initializeChart: ->
-    # console?.log("Initializing Chart")
     preparedData = @prepareData()
     seriesNames  = @getSeriesNames()
     @chart = new Highcharts.StockChart
@@ -218,11 +222,20 @@ window.TestChamber = class TestChamber
           text: "Meassured Time"
           margin: 80
       yAxis:
-        title:
-          text: "Temperature (C)"
+        [
+          {
+            title:
+              text: "Temperature (C)"
+          },
+          {
+            title:
+              text: "Total Wattage"
+            opposite: true
+          }
+        ]
 
-      series: _.map( seriesNames, (name, index) ->
-        { name: name, data: preparedData[index] } )
+      series: _.map(seriesNames, (name, index) ->
+        { name: name, data: preparedData[index], yAxis: 0 } )
 
     @chartInitialized = (@chart != 0)
 
@@ -245,18 +258,14 @@ class PusherListener
 
   _setupListeners: ->
     @channel.bind 'meassurement-added', (data) =>
-      # console?.log(data, "raw data from server")
 
       if typeof(data) == "string"
         data = data.replace(/'/g, '"')
         data = jQuery.parseJSON(data)
 
-      # console?.log(data, "parsed data")
-
       @_addRawDataRow(data['rawData'])
       @app.chamber.pusherEventReceived()
       true
-
 
 
 jQuery ($) ->
