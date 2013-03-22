@@ -231,6 +231,8 @@ window.TestChamber = class TestChamber
             title:
               text: "Total Wattage"
             opposite: true
+            min: 0
+            max: 450
           }
         ]
 

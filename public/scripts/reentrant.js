@@ -277,7 +277,9 @@
             title: {
               text: "Total Wattage"
             },
-            opposite: true
+            opposite: true,
+            min: 0,
+            max: 450
           }
         ],
         series: _.map(seriesNames, function(name, index) {
