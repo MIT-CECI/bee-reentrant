@@ -32,6 +32,11 @@ label,
     &.on {background: darken($light-yellow, 3%);}
   }
 
+  .sensor.total-wattz{
+    width: 120px;
+    top: 20px;
+  }
+
   .sensor.ceil{
     top: 120px;
     &.interior{ left: 35%; }

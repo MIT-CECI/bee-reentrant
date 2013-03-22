@@ -29,6 +29,9 @@ label,
     background: white; }
     #bee-room-modal .sensor.on {
       background: #ffffd1; }
+  #bee-room-modal .sensor.total-wattz {
+    width: 120px;
+    top: 20px; }
   #bee-room-modal .sensor.ceil {
     top: 120px; }
     #bee-room-modal .sensor.ceil.interior {
